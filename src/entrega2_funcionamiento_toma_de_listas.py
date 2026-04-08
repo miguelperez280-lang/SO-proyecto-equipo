@@ -3,7 +3,7 @@ import time
 import random
 from multiprocessing import Process, Value, Lock
 
-MAX_RAM = 1000  
+MAX_RAM = 1500  
 MAX_RETRIES = 3 
 
 def log_event(message, log_lock):
@@ -53,8 +53,9 @@ def process_appointment(pid, current_ram, max_ram, wait_events, mem_lock, log_lo
         return
 
     # Si fue admitido, procesamos la cita (simulado)
-    log_event(f"Worker {pid}: ADMITIDO. Procesando cita con {required_ram}MB", log_lock)
-    time.sleep(random.uniform(0.5, 1.5)) 
+    process_time = random.uniform(0.5, 1.5)
+    log_event(f"Worker {pid}: ADMITIDO ({required_ram}MB, {process_time:.2f}s)", log_lock)
+    time.sleep(process_time)
 
     # Liberación de memoria
     mem_lock.acquire()
