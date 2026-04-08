@@ -8,11 +8,9 @@ MAX_RETRIES = 3
 
 def log_event(message, log_lock):
     with log_lock:
-        # Abrir archivo síncronamente (O_WRONLY, O_CREAT, O_APPEND)
-        fd = os.open("run.log", os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
-        log_line = f"[{time.strftime('%H:%M:%S')}] {message}\n".encode('utf-8')
-        os.write(fd, log_line) # Escritura directa
-        os.close(fd)           # Cierre síncrono
+        with open("run.log", "a") as f:
+            f.write(f"[{time.strftime('%H:%M:%S')}] {message}\n")
+
 
 def process_appointment(pid, current_ram, max_ram, wait_events, mem_lock, log_lock):
     """
